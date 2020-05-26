@@ -1,14 +1,16 @@
 import React from "react";
-import { Cards } from "../Cards/Cards";
+import Cards from "../Cards/Cards"
 
-export function Home() {
-  return (
-    <div>
-      <Cards
-        urlImagem={"https://picsum.photos/200/150?a=1"}
-        titulo={"Ítem A"}
-        valor={40.5}
-      />
-    </div>
-  );
+class Home extends React.Component {
+  render() {
+    return (
+      <div>
+        <p>Quantidade de Produtos({this.props.numeroDeP}).</p>
+        <Cards
+        // key={produto.id}
+        />    
+      </div>
+    );
+  }
 }
+export default Home;

@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 import Filtros from "./components/Filtros/Filtros";
-import { Home } from "./components/Home/Home";
+import Home  from "./components/Home/Home";
 
 //import Carrinho from "./components/Carrinho/Carrinho";
 
