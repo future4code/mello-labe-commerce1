@@ -11,7 +11,9 @@ function App() {
     <div>
       <Filtros />
       <hr />
-      <Home />
+      <Home
+      numeroDeProdutos="8"
+      />
     </div>
   );
 }

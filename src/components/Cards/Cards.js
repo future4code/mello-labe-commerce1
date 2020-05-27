@@ -68,7 +68,9 @@ class Cards extends React.Component {
     const numeroDeProdutos = this.state.produtos.length;
     console.log(numeroDeProdutos);
 
-    return <div>{listaDeProdutos}</div>;
+    return(
+    <div>{listaDeProdutos}</div>
+    ) ; 
   }
 }
 export default Cards;
