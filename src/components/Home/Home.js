@@ -6,7 +6,7 @@ class Home extends React.Component {
       {
         id: 1,
         name: "Item A",
-        value: 500.0,
+        value: 50.0,
         imageUrl: "https://picsum.photos/200/200?a=1",
         adicionado: false,
       },
@@ -27,47 +27,40 @@ class Home extends React.Component {
       {
         id: 4,
         name: "Item D",
-        value: 10000.0,
+        value: 349.0,
         imageUrl: "https://picsum.photos/200/200?a=4",
         adicionado: false,
-
       },
       {
         id: 5,
         name: "Item E",
-        value: 10000.0,
+        value: 23.55,
         imageUrl: "https://picsum.photos/200/200?a=5",
         adicionado: false,
-
       },
       {
         id: 6,
         name: "Item F",
-        value: 10000.0,
+        value: 123.0,
         imageUrl: "https://picsum.photos/200/200?a=6",
-
         adicionado: false,
-
       },
       {
         id: 7,
         name: "Item G",
-        value: 10000.0,
+        value: 27.0,
         imageUrl: "https://picsum.photos/200/200?a=7",
-
         adicionado: false,
-
       },
       {
         id: 8,
         name: "Item G",
-        value: 10000.0,
+        value: 950.0,
         imageUrl: "https://picsum.photos/200/200?a=8",
-
         adicionado: false,
       },
     ],
-
+    ordenado: false,
     novaListaCarrinho: [],
 
     /* idCarrinho: "",
@@ -75,6 +68,19 @@ class Home extends React.Component {
     valueCarrinho: "",*/
   };
   //recebe um argumento
+
+  onChangeSelect = (event) => {
+    const listaOrdenada = this.state.produtos.sort(function (a, b) {
+      return a.value > b.value ? 1 : b.value > a.value ? -1 : 0;
+    });
+    this.setState({ produtos: listaOrdenada });
+    this.setState({ ordenado: !this.state.ordenado });
+
+    if (this.state.ordenado === false) {
+      this.setState({ produtos: listaOrdenada.reverse() });
+    }
+  };
+
   adicionarNoCarrinho = (produto) => {
     let carrinho = produto;
 
@@ -122,8 +128,6 @@ class Home extends React.Component {
   };
 
   render() {
-    //console.log(this.state.produtos);
-
     const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
       return (
         <section>
@@ -133,12 +137,6 @@ class Home extends React.Component {
     });
     const soma = listaFinalProdutos;
     console.log(soma);
-=======
-      },
-    ],
-  };
-
-  render() {
     const listaDeProdutos = this.state.produtos.map((produto) => {
       return (
         <div>
@@ -148,7 +146,6 @@ class Home extends React.Component {
           <button onClick={() => this.adicionarNoCarrinho(produto)}>
             Adicionar ao Carrinho
           </button>
-          <button onClick={() => {}}>Adicionar ao Carrinho</button>
         </div>
       );
     });
@@ -157,21 +154,8 @@ class Home extends React.Component {
 
     return (
       <div>
-        <select>
-    // listaDeProdutos.sort(function (a, b) {
-    //   if (a.value > b.value) {
-    //     return 1;
-    //   }
-    //   if (a.value < b.value) {
-    //     return -1;
-    //   }
-    //   return 0;
-    // });
-    const numeroDeProdutos = this.state.produtos.length;
-    
-    return (
-      <div>
-        <select >
+        <select onChange={this.onChangeSelect}>
+          <option></option>
           <option value="descrescente">Preço: Decrescente</option>
           <option value="crescente">Preço: Crescente</option>
         </select>
@@ -185,15 +169,4 @@ class Home extends React.Component {
     );
   }
 }
-export default Home;
-
-// listaDeProdutos.sort(function (a, b) {
-//   if (a.value > b.value) {
-//     return 1;
-//   }
-//   if (a.value < b.value) {
-//     return -1;
-//   }
-//   return 0;
-// });
 export default Home;
