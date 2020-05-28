@@ -60,6 +60,74 @@ class Home extends React.Component {
         adicionado: false,
       },
     ],
+
+    novaListaCarrinho: [],
+
+    /* idCarrinho: "",
+    nameCarrinho: "",
+    valueCarrinho: "",*/
+  };
+  //recebe um argumento
+  adicionarNoCarrinho = (produto) => {
+    let carrinho = produto;
+
+    this.setState({
+      novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
+    });
+
+    /*const itemCarrinho = {
+      id: this.state.id,
+      name: this.state.name,
+      value: this.state.value,
+      adicionado: false,
+    };
+    const itensCarrinho = itemCarrinho;
+
+    this.setState({
+      novaListaCarrinho: [...this.state.novaListaCarrinho, produto],
+    });
+    console.log(this.novaListaCarrinho);
+    /*  this.setState({
+      produtos: itensCarrinho,
+    });
+  */
+  };
+
+  selectItem = (id) => {
+    //passar por todos ids da array, quando for igual o id do on click esse vai ter que riscar. if tarefa.id === id, tarefa.id = true, colocar em um novo array e dar um set state
+
+    const listaItensAdicionados = this.state.produtos.map(
+      (produto, index, array) => {
+        if (id === produto.id) {
+          const itensAdicionados = {
+            ...produto,
+            adicionado: !produto.adicionado,
+          };
+          //console.log(itensAdicionados);
+          return itensAdicionados;
+        } else {
+          return produto;
+        }
+      }
+    );
+
+    this.setState({ tarefas: listaItensAdicionados });
+  };
+
+  render() {
+    //console.log(this.state.produtos);
+
+    const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
+      return (
+        <section>
+          <p>{item.value}</p>
+        </section>
+      );
+    });
+    const soma = listaFinalProdutos;
+    console.log(soma);
+      },
+    ],
     ordenado: false,
     novaListaCarrinho: [],
 
@@ -150,6 +218,11 @@ class Home extends React.Component {
       );
     });
 
+    const numeroDeProdutos = this.state.produtos.length;
+
+    return (
+      <div>
+        <select>
     const numeroDeProdutos = this.state.produtos.length;
 
     return (
