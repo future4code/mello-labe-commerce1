@@ -8,23 +8,15 @@ const ContainerGeral = styled.div`
   display: flex;
   flex-direction: row;
   background-color: gray;
-`;
-
-const ContainerH = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  background-color: green;
-  width: 800px;
+  width: 100vw;
 `;
 
 function App() {
   return (
     <ContainerGeral>
       <Filtros />
-      <ContainerH>
-        <Home />
-      </ContainerH>
+
+      <Home />
     </ContainerGeral>
   );
 }

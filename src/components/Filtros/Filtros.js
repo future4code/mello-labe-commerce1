@@ -4,11 +4,12 @@ import styled from "styled-components";
 const ContainerFiltro = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: red;
+  background-color: white;
   width: 200px;
-  height: 500px;
+  height: 95vh;
   padding: 10px;
   margin: 10px;
+  border: 1px solid black;
 `;
 
 class Filtros extends React.Component {
