@@ -62,12 +62,10 @@ class Home extends React.Component {
     ],
     ordenado: false,
     novaListaCarrinho: [],
-
-    /* idCarrinho: "",
-    nameCarrinho: "",
-    valueCarrinho: "",*/
+    valorInputBusca: "",
+    valorInputMinimo: "",
+    valorInputMaximo: "",
   };
-  //recebe um argumento
 
   onChangeSelect = (event) => {
     const listaOrdenada = this.state.produtos.sort(function (a, b) {
@@ -81,29 +79,26 @@ class Home extends React.Component {
     }
   };
 
+  onChangeInputMinimo = (event) => {
+    this.setState({ valorInputMinimo: event.target.value });
+  };
+
+  onChangeInputMaximo = (event) => {
+    this.setState({ valorInputMaximo: event.target.value });
+  };
+
+  onChangeInputBusca = (event) => {
+    this.setState({ valorInputBusca: event.target.value });
+    console.log(this.state.valorInputBusca);
+  };
+  filtraProdutos = (event) => {};
+
   adicionarNoCarrinho = (produto) => {
     let carrinho = produto;
 
     this.setState({
       novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
     });
-
-    /*const itemCarrinho = {
-      id: this.state.id,
-      name: this.state.name,
-      value: this.state.value,
-      adicionado: false,
-    };
-    const itensCarrinho = itemCarrinho;
-
-    this.setState({
-      novaListaCarrinho: [...this.state.novaListaCarrinho, produto],
-    });
-    console.log(this.novaListaCarrinho);
-    /*  this.setState({
-      produtos: itensCarrinho,
-    });
-  */
   };
 
   selectItem = (id) => {
@@ -128,6 +123,21 @@ class Home extends React.Component {
   };
 
   render() {
+    let listaDoEstado = this.state.produtos;
+    if (this.state.valorInputBusca !== "") {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.name.includes(this.state.valorInputBusca);
+      });
+    } else if (this.state.valorInputMaximo !== "") {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.value <= this.state.valorInputMaximo;
+      });
+    } else if (this.state.valorInputMinimo !== "") {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.value >= this.state.valorInputMinimo;
+      });
+    }
+
     const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
       return (
         <section>
@@ -135,9 +145,10 @@ class Home extends React.Component {
         </section>
       );
     });
+
     const soma = listaFinalProdutos;
-    console.log(soma);
-    const listaDeProdutos = this.state.produtos.map((produto) => {
+
+    const listaRenderizada = listaDoEstado.map((produto) => {
       return (
         <div>
           <p>{produto.name}</p>
@@ -150,17 +161,38 @@ class Home extends React.Component {
       );
     });
 
-    const numeroDeProdutos = this.state.produtos.length;
+    const numeroDeProdutos = listaDoEstado.length;
 
     return (
       <div>
+        <div>
+          <h1>Filtros</h1>
+          <label>Valor Mínimo:</label>
+          <input
+            type="number"
+            value={this.state.valorInputMinimo}
+            onChange={this.onChangeInputMinimo}
+          ></input>
+          <label>Valor Máximo:</label>
+          <input
+            type="number"
+            value={this.state.valorInputMaximo}
+            onChange={this.onChangeInputMaximo}
+          ></input>
+          <label>Buscar Produto</label>
+          <input
+            value={this.state.valorInputBusca}
+            onChange={this.onChangeInputBusca}
+          ></input>
+          <hr />
+        </div>
         <select onChange={this.onChangeSelect}>
           <option></option>
           <option value="descrescente">Preço: Decrescente</option>
           <option value="crescente">Preço: Crescente</option>
         </select>
         <p>Quantidade de Produtos: {numeroDeProdutos}</p>
-        <div>{listaDeProdutos}</div>
+        <div>{listaRenderizada}</div>
         <div>
           <h1>Carrinho:</h1>
           {listaFinalProdutos}
