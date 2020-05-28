@@ -1,4 +1,24 @@
 import React from "react";
+import styled from "styled-components";
+
+// const ContainerHome = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   background-color: green;
+//   width: 200px;
+//   height: 100px;
+// `;
+
+const ContainerCard = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: yellow;
+`;
+
+const ContainerItem = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 class Home extends React.Component {
   state = {
@@ -54,129 +74,46 @@ class Home extends React.Component {
       },
       {
         id: 8,
-        name: "Item G",
+        name: "Item H",
         value: 950.0,
         imageUrl: "https://picsum.photos/200/200?a=8",
         adicionado: false,
       },
     ],
-
-    novaListaCarrinho: [],
-
-    /* idCarrinho: "",
-    nameCarrinho: "",
-    valueCarrinho: "",*/
-  };
-  //recebe um argumento
-  adicionarNoCarrinho = (produto) => {
-    let carrinho = produto;
-
-    this.setState({
-      novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
-    });
-
-    /*const itemCarrinho = {
-      id: this.state.id,
-      name: this.state.name,
-      value: this.state.value,
-      adicionado: false,
-    };
-    const itensCarrinho = itemCarrinho;
-
-    this.setState({
-      novaListaCarrinho: [...this.state.novaListaCarrinho, produto],
-    });
-    console.log(this.novaListaCarrinho);
-    /*  this.setState({
-      produtos: itensCarrinho,
-    });
-  */
-  };
-
-  selectItem = (id) => {
-    //passar por todos ids da array, quando for igual o id do on click esse vai ter que riscar. if tarefa.id === id, tarefa.id = true, colocar em um novo array e dar um set state
-
-    const listaItensAdicionados = this.state.produtos.map(
-      (produto, index, array) => {
-        if (id === produto.id) {
-          const itensAdicionados = {
-            ...produto,
-            adicionado: !produto.adicionado,
-          };
-          //console.log(itensAdicionados);
-          return itensAdicionados;
-        } else {
-          return produto;
-        }
-      }
-    );
-
-    this.setState({ tarefas: listaItensAdicionados });
-  };
-
-  render() {
-    //console.log(this.state.produtos);
-
-    const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
-      return (
-        <section>
-          <p>{item.value}</p>
-        </section>
-      );
-    });
-    const soma = listaFinalProdutos;
-    console.log(soma);
-      },
-    ],
     ordenado: false,
+    contador: 1,
     novaListaCarrinho: [],
-
-    /* idCarrinho: "",
-    nameCarrinho: "",
-    valueCarrinho: "",*/
   };
-  //recebe um argumento
 
-  onChangeSelect = (event) => {
+  // ORDENAR PRODUTOS EM CRESCENTE E DECRESCENTE
+  onChangeSelect = () => {
     const listaOrdenada = this.state.produtos.sort(function (a, b) {
       return a.value > b.value ? 1 : b.value > a.value ? -1 : 0;
     });
     this.setState({ produtos: listaOrdenada });
     this.setState({ ordenado: !this.state.ordenado });
-
     if (this.state.ordenado === false) {
       this.setState({ produtos: listaOrdenada.reverse() });
     }
   };
 
+  // ADICIONAR PRODUTOS AO CARRINHO
   adicionarNoCarrinho = (produto) => {
     let carrinho = produto;
-
     this.setState({
       novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
     });
-
-    /*const itemCarrinho = {
-      id: this.state.id,
-      name: this.state.name,
-      value: this.state.value,
-      adicionado: false,
-    };
-    const itensCarrinho = itemCarrinho;
-
-    this.setState({
-      novaListaCarrinho: [...this.state.novaListaCarrinho, produto],
-    });
-    console.log(this.novaListaCarrinho);
-    /*  this.setState({
-      produtos: itensCarrinho,
-    });
-  */
+    //
+    if (produto.id === this.state.produtos.id) {
+      let objeto = this.state;
+      objeto.contador += 1;
+      this.setState({ objeto });
+      console.log(objeto);
+    }
   };
-
+  /*
   selectItem = (id) => {
     //passar por todos ids da array, quando for igual o id do on click esse vai ter que riscar. if tarefa.id === id, tarefa.id = true, colocar em um novo array e dar um set state
-
     const listaItensAdicionados = this.state.produtos.map(
       (produto, index, array) => {
         if (id === produto.id) {
@@ -191,52 +128,67 @@ class Home extends React.Component {
         }
       }
     );
-
     this.setState({ tarefas: listaItensAdicionados });
   };
+  */
 
   render() {
-    const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
-      return (
-        <section>
-          <p>{item.value}</p>
-        </section>
-      );
+    // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O VALOR DO PRODUTO
+    const valorDoItem = this.state.novaListaCarrinho.map((item) => {
+      return item.value;
     });
-    const soma = listaFinalProdutos;
+
+    // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O NOME DO PRODUTO
+    const nomeDoItem = this.state.novaListaCarrinho.map((item) => {
+      return <p>{item.name}</p>;
+    });
+
+    // REDUCE PARA SOMAR OS VALORES DE TODOS OS PRODUTOS NO CARRINHO
+    const soma = valorDoItem.reduce(
+      (soma, valorDoItem) => soma + valorDoItem,
+      0
+    );
     console.log(soma);
+
+    // MAP DO STATE PARA MOSTRAR O CARD COM INFOS DO PRODUTO
     const listaDeProdutos = this.state.produtos.map((produto) => {
       return (
-        <div>
-          <p>{produto.name}</p>
-          <p>R$ {produto.value}</p>
-          <img src={produto.imageUrl} alt="Imagem do produto" />
-          <button onClick={() => this.adicionarNoCarrinho(produto)}>
-            Adicionar ao Carrinho
-          </button>
-        </div>
+        <ContainerCard>
+          <ContainerItem>
+            <img src={produto.imageUrl} alt="Imagem do produto" />
+            <p>{produto.name}</p>
+            <p>R$ {produto.value}</p>
+            <button onClick={() => this.adicionarNoCarrinho(produto)}>
+              Adicionar ao Carrinho
+            </button>
+          </ContainerItem>
+        </ContainerCard>
       );
     });
 
+    // CONST PARA INDICAR A QUANTIDADE DE PRODUTOS
     const numeroDeProdutos = this.state.produtos.length;
 
+    // ============================================================
     return (
       <div>
-        <select>
-    const numeroDeProdutos = this.state.produtos.length;
-
-    return (
-      <div>
-        <select onChange={this.onChangeSelect}>
-          <option></option>
-          <option value="descrescente">Preço: Decrescente</option>
-          <option value="crescente">Preço: Crescente</option>
-        </select>
-        <p>Quantidade de Produtos: {numeroDeProdutos}</p>
-        <div>{listaDeProdutos}</div>
+        <div>
+          <div>
+            <select onChange={this.onChangeSelect}>
+              <option></option> {/*VAZIO DE INÍCIO*/}
+              <option value="descrescente">Preço: Decrescente</option>
+              <option value="crescente">Preço: Crescente</option>
+            </select>
+            <p>Quantidade de Produtos: {numeroDeProdutos}</p>
+          </div>
+          {listaDeProdutos}
+        </div>
         <div>
           <h1>Carrinho:</h1>
-          {listaFinalProdutos}
+          {/*NOME DE CADA ITEM NO CARRINHO*/}
+          {nomeDoItem}
+          {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
+          <p>R${soma}</p>
         </div>
       </div>
     );

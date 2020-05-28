@@ -1,20 +1,31 @@
 import React from "react";
-
 import "./App.css";
 import Filtros from "./components/Filtros/Filtros";
-import Home  from "./components/Home/Home";
+import Home from "./components/Home/Home";
+import styled from "styled-components";
 
-//import Carrinho from "./components/Carrinho/Carrinho";
+const ContainerGeral = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: gray;
+`;
+
+const ContainerH = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: green;
+  width: 800px;
+`;
 
 function App() {
   return (
-    <div>
+    <ContainerGeral>
       <Filtros />
-      <hr />
-      <Home
-      numeroDeProdutos="8"
-      />
-    </div>
+      <ContainerH>
+        <Home />
+      </ContainerH>
+    </ContainerGeral>
   );
 }
 
