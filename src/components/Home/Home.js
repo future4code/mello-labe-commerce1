@@ -1,23 +1,47 @@
 import React from "react";
 import styled from "styled-components";
 
-// const ContainerHome = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   background-color: green;
-//   width: 200px;
-//   height: 100px;
-// `;
+const ContainerHome = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: green;
+  width: 85vw;
+  height: 100vh;
+`;
+const CrescenteDecrescente = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  /*background-color: blue;*/
+  width: 60vw;
+  height: 50px;
+  justify-content: space-between;
+  align-items: center;
+`;
 
+const ContainerCardECarrinho = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 85vw;
+  height: 100vh;
+`;
 const ContainerCard = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+
   background-color: yellow;
+  border: 1px solid black;
+  justify-content: space-around;
+  align-items: center;
 `;
 
-const ContainerItem = styled.div`
+const ContainerCarrinho = styled.div`
   display: flex;
   flex-direction: column;
+  border: 1px solid pink;
+  justify-content: space-between;
+  margin: 10px;
 `;
 
 class Home extends React.Component {
@@ -142,6 +166,15 @@ class Home extends React.Component {
     const nomeDoItem = this.state.novaListaCarrinho.map((item) => {
       return <p>{item.name}</p>;
     });
+    nomeDoItem.reduce(function (object, item) {
+      if (!object[item]) {
+        object[item] = 1;
+      } else {
+        object[item]++;
+      }
+      return object;
+    }, {});
+    console.log(object, item);
 
     // REDUCE PARA SOMAR OS VALORES DE TODOS OS PRODUTOS NO CARRINHO
     const soma = valorDoItem.reduce(
@@ -153,16 +186,16 @@ class Home extends React.Component {
     // MAP DO STATE PARA MOSTRAR O CARD COM INFOS DO PRODUTO
     const listaDeProdutos = this.state.produtos.map((produto) => {
       return (
-        <ContainerCard>
-          <ContainerItem>
+        <div>
+          <div>
             <img src={produto.imageUrl} alt="Imagem do produto" />
             <p>{produto.name}</p>
             <p>R$ {produto.value}</p>
             <button onClick={() => this.adicionarNoCarrinho(produto)}>
               Adicionar ao Carrinho
             </button>
-          </ContainerItem>
-        </ContainerCard>
+          </div>
+        </div>
       );
     });
 
@@ -171,26 +204,28 @@ class Home extends React.Component {
 
     // ============================================================
     return (
-      <div>
-        <div>
-          <div>
-            <select onChange={this.onChangeSelect}>
-              <option></option> {/*VAZIO DE INÍCIO*/}
-              <option value="descrescente">Preço: Decrescente</option>
-              <option value="crescente">Preço: Crescente</option>
-            </select>
-            <p>Quantidade de Produtos: {numeroDeProdutos}</p>
-          </div>
-          {listaDeProdutos}
-        </div>
-        <div>
-          <h1>Carrinho:</h1>
-          {/*NOME DE CADA ITEM NO CARRINHO*/}
-          {nomeDoItem}
-          {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
-          <p>R${soma}</p>
-        </div>
-      </div>
+      <ContainerHome>
+        <CrescenteDecrescente>
+          <select onChange={this.onChangeSelect}>
+            <option></option> {/*VAZIO DE INÍCIO*/}
+            <option value="descrescente">Preço: Decrescente</option>
+            <option value="crescente">Preço: Crescente</option>
+          </select>
+          <p>Quantidade de Produtos: {numeroDeProdutos}</p>
+        </CrescenteDecrescente>
+
+        <ContainerCardECarrinho>
+          <ContainerCard>{listaDeProdutos}</ContainerCard>
+
+          <ContainerCarrinho>
+            <h1>Carrinho:</h1>
+            {/*NOME DE CADA ITEM NO CARRINHO*/}
+            {nomeDoItem}
+            {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
+            <p>R${soma}</p>
+          </ContainerCarrinho>
+        </ContainerCardECarrinho>
+      </ContainerHome>
     );
   }
 }
