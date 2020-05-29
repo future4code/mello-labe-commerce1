@@ -1,4 +1,48 @@
 import React from "react";
+import styled from "styled-components";
+
+const ContainerHome = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: green;
+  width: 85vw;
+  height: 100vh;
+`;
+const CrescenteDecrescente = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  /*background-color: blue;*/
+  width: 60vw;
+  height: 50px;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ContainerCardECarrinho = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 85vw;
+  height: 100vh;
+`;
+const ContainerCard = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  background-color: yellow;
+  border: 1px solid black;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const ContainerCarrinho = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid pink;
+  justify-content: space-between;
+  margin: 10px;
+`;
 
 class Home extends React.Component {
   state = {
@@ -54,30 +98,35 @@ class Home extends React.Component {
       },
       {
         id: 8,
-        name: "Item G",
+        name: "Item H",
         value: 950.0,
         imageUrl: "https://picsum.photos/200/200?a=8",
         adicionado: false,
       },
     ],
     ordenado: false,
+    contador: 1,
     novaListaCarrinho: [],
+
     valorInputBusca: "",
     valorInputMinimo: "",
     valorInputMaximo: "",
+
+
   };
 
-  onChangeSelect = (event) => {
+  // ORDENAR PRODUTOS EM CRESCENTE E DECRESCENTE
+  onChangeSelect = () => {
     const listaOrdenada = this.state.produtos.sort(function (a, b) {
       return a.value > b.value ? 1 : b.value > a.value ? -1 : 0;
     });
     this.setState({ produtos: listaOrdenada });
     this.setState({ ordenado: !this.state.ordenado });
-
     if (this.state.ordenado === false) {
       this.setState({ produtos: listaOrdenada.reverse() });
     }
   };
+
 
   onChangeInputMinimo = (event) => {
     this.setState({ valorInputMinimo: event.target.value });
@@ -93,17 +142,28 @@ class Home extends React.Component {
   };
   filtraProdutos = (event) => {};
 
+
+  // ADICIONAR PRODUTOS AO CARRINHO
+
   adicionarNoCarrinho = (produto) => {
     let carrinho = produto;
-
     this.setState({
       novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
     });
-  };
 
+
+    //
+    if (produto.id === this.state.produtos.id) {
+      let objeto = this.state;
+      objeto.contador += 1;
+      this.setState({ objeto });
+      console.log(objeto);
+    }
+
+  };
+  /*
   selectItem = (id) => {
     //passar por todos ids da array, quando for igual o id do on click esse vai ter que riscar. if tarefa.id === id, tarefa.id = true, colocar em um novo array e dar um set state
-
     const listaItensAdicionados = this.state.produtos.map(
       (produto, index, array) => {
         if (id === produto.id) {
@@ -118,11 +178,12 @@ class Home extends React.Component {
         }
       }
     );
-
     this.setState({ tarefas: listaItensAdicionados });
   };
+  */
 
   render() {
+
     let listaDoEstado = this.state.produtos;
     if (this.state.valorInputBusca !== "") {
       listaDoEstado = listaDoEstado.filter((produto) => {
@@ -149,21 +210,60 @@ class Home extends React.Component {
     const soma = listaFinalProdutos;
 
     const listaRenderizada = listaDoEstado.map((produto) => {
+
+    // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O VALOR DO PRODUTO
+    const valorDoItem = this.state.novaListaCarrinho.map((item) => {
+      return item.value;
+    });
+
+    // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O NOME DO PRODUTO
+    const nomeDoItem = this.state.novaListaCarrinho.map((item) => {
+      return <p>{item.name}</p>;
+    });
+    nomeDoItem.reduce(function (object, item) {
+      if (!object[item]) {
+        object[item] = 1;
+      } else {
+        object[item]++;
+      }
+      return object;
+    }, {});
+    console.log(object, item);
+
+    // REDUCE PARA SOMAR OS VALORES DE TODOS OS PRODUTOS NO CARRINHO
+    const soma = valorDoItem.reduce(
+      (soma, valorDoItem) => soma + valorDoItem,
+      0
+    );
+    console.log(soma);
+
+    // MAP DO STATE PARA MOSTRAR O CARD COM INFOS DO PRODUTO
+    const listaDeProdutos = this.state.produtos.map((produto) => {
+
       return (
         <div>
-          <p>{produto.name}</p>
-          <p>R$ {produto.value}</p>
-          <img src={produto.imageUrl} alt="Imagem do produto" />
-          <button onClick={() => this.adicionarNoCarrinho(produto)}>
-            Adicionar ao Carrinho
-          </button>
+          <div>
+            <img src={produto.imageUrl} alt="Imagem do produto" />
+            <p>{produto.name}</p>
+            <p>R$ {produto.value}</p>
+            <button onClick={() => this.adicionarNoCarrinho(produto)}>
+              Adicionar ao Carrinho
+            </button>
+          </div>
         </div>
       );
     });
 
+
     const numeroDeProdutos = listaDoEstado.length;
 
+    // CONST PARA INDICAR A QUANTIDADE DE PRODUTOS
+    const numeroDeProdutos = this.state.produtos.length;
+
+
+    // ============================================================
     return (
+
       <div>
         <div>
           <h1>Filtros</h1>
@@ -198,7 +298,32 @@ class Home extends React.Component {
           {listaFinalProdutos}
         </div>
       </div>
+
+      <ContainerHome>
+        <CrescenteDecrescente>
+          <select onChange={this.onChangeSelect}>
+            <option></option> {/*VAZIO DE INÍCIO*/}
+            <option value="descrescente">Preço: Decrescente</option>
+            <option value="crescente">Preço: Crescente</option>
+          </select>
+          <p>Quantidade de Produtos: {numeroDeProdutos}</p>
+        </CrescenteDecrescente>
+
+        <ContainerCardECarrinho>
+          <ContainerCard>{listaDeProdutos}</ContainerCard>
+
+          <ContainerCarrinho>
+            <h1>Carrinho:</h1>
+            {/*NOME DE CADA ITEM NO CARRINHO*/}
+            {nomeDoItem}
+            {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
+            <p>R${soma}</p>
+          </ContainerCarrinho>
+        </ContainerCardECarrinho>
+      </ContainerHome>
+
     );
   }
 }
 export default Home;
+// teste
