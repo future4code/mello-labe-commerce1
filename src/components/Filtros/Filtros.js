@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ContainerFiltro = styled.div`
+/*const ContainerFiltro = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -10,19 +10,19 @@ const ContainerFiltro = styled.div`
   padding: 10px;
   margin: 10px;
   border: 1px solid black;
-`;
+`;*/
 
 class Filtros extends React.Component {
   state = {
     valorInputBusca: "",
   };
   onChangeInputBusca = (event) => {
-    this.setState({valorInputBusca: event.target.value})
+    this.setState({ valorInputBusca: event.target.value });
   };
   render() {
     console.log(this.state.valorInputBusca);
     return (
-      <ContainerFiltro>
+      <div>
         <h1>Filtros</h1>
         <label>Valor Mínimo:</label>
         <input type="number"></input>
@@ -30,12 +30,13 @@ class Filtros extends React.Component {
         <input type="number"></input>
         <label>Buscar Produto</label>
 
-        <input value={this.state.valorInputBusca} onChange={this.onChangeInputBusca}></input>
-      </div>
+        <input
+          value={this.state.valorInputBusca}
+          onChange={this.onChangeInputBusca}
+        ></input>
 
         <input></input>
-      </ContainerFiltro>
-
+      </div>
     );
   }
 }

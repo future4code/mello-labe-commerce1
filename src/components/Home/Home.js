@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ContainerHome = styled.div`
+/*const ContainerHome = styled.div`
   display: flex;
   flex-direction: column;
   background-color: green;
@@ -11,7 +11,7 @@ const ContainerHome = styled.div`
 const CrescenteDecrescente = styled.div`
   display: flex;
   flex-direction: row-reverse;
-  /*background-color: blue;*/
+  background-color: blue;
   width: 60vw;
   height: 50px;
   justify-content: space-between;
@@ -43,7 +43,7 @@ const ContainerCarrinho = styled.div`
   justify-content: space-between;
   margin: 10px;
 `;
-
+*/
 class Home extends React.Component {
   state = {
     produtos: [
@@ -111,8 +111,6 @@ class Home extends React.Component {
     valorInputBusca: "",
     valorInputMinimo: "",
     valorInputMaximo: "",
-
-
   };
 
   // ORDENAR PRODUTOS EM CRESCENTE E DECRESCENTE
@@ -127,7 +125,6 @@ class Home extends React.Component {
     }
   };
 
-
   onChangeInputMinimo = (event) => {
     this.setState({ valorInputMinimo: event.target.value });
   };
@@ -138,10 +135,7 @@ class Home extends React.Component {
 
   onChangeInputBusca = (event) => {
     this.setState({ valorInputBusca: event.target.value });
-    console.log(this.state.valorInputBusca);
   };
-  filtraProdutos = (event) => {};
-
 
   // ADICIONAR PRODUTOS AO CARRINHO
 
@@ -150,18 +144,8 @@ class Home extends React.Component {
     this.setState({
       novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
     });
-
-
-    //
-    if (produto.id === this.state.produtos.id) {
-      let objeto = this.state;
-      objeto.contador += 1;
-      this.setState({ objeto });
-      console.log(objeto);
-    }
-
   };
-  /*
+  /*Deletar produto do carrinho
   selectItem = (id) => {
     //passar por todos ids da array, quando for igual o id do on click esse vai ter que riscar. if tarefa.id === id, tarefa.id = true, colocar em um novo array e dar um set state
     const listaItensAdicionados = this.state.produtos.map(
@@ -181,9 +165,8 @@ class Home extends React.Component {
     this.setState({ tarefas: listaItensAdicionados });
   };
   */
-
+  //renderização condicional do filtro
   render() {
-
     let listaDoEstado = this.state.produtos;
     if (this.state.valorInputBusca !== "") {
       listaDoEstado = listaDoEstado.filter((produto) => {
@@ -198,37 +181,57 @@ class Home extends React.Component {
         return produto.value >= this.state.valorInputMinimo;
       });
     }
-
-    const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
+    // Cópia do state produtos
+    const listaRenderizada = listaDoEstado.map((produto) => {
       return (
-        <section>
-          <p>{item.value}</p>
-        </section>
+        <div>
+          <p>{produto.name}</p>
+          <p>R$ {produto.value}</p>
+          <img src={produto.imageUrl} alt="Imagem do produto" />
+          <button onClick={() => this.adicionarNoCarrinho(produto)}>
+            Adicionar ao Carrinho
+          </button>
+        </div>
       );
     });
-
-    const soma = listaFinalProdutos;
-
-    const listaRenderizada = listaDoEstado.map((produto) => {
 
     // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O VALOR DO PRODUTO
     const valorDoItem = this.state.novaListaCarrinho.map((item) => {
       return item.value;
     });
 
-    // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O NOME DO PRODUTO
-    const nomeDoItem = this.state.novaListaCarrinho.map((item) => {
-      return <p>{item.name}</p>;
-    });
-    nomeDoItem.reduce(function (object, item) {
-      if (!object[item]) {
-        object[item] = 1;
+    // NOVO ARRAY COM OS PRODUTOS ADICIONADOS PARA PEGAR A QUANTIDADE DE CADA PRODUTO
+    let arrayProdutoAdicionado = [];
+    this.state.novaListaCarrinho.forEach((produto) => {
+      const estaNoArray = arrayProdutoAdicionado.findIndex(
+        (prod) => prod.id === produto.id
+      );
+      if (estaNoArray === -1) {
+        const novoProduto = {
+          id: produto.id,
+          name: produto.name,
+          quantidade: 1,
+        };
+        arrayProdutoAdicionado.push(novoProduto);
       } else {
-        object[item]++;
+        const quantidadeEncontrada =
+          arrayProdutoAdicionado[estaNoArray].quantidade;
+        arrayProdutoAdicionado[estaNoArray] = {
+          ...arrayProdutoAdicionado[estaNoArray],
+          quantidade: quantidadeEncontrada + 1,
+        };
       }
-      return object;
-    }, {});
-    console.log(object, item);
+    });
+    // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR A QUANTIDADE DE
+    //CADA PRODUTO E O RESPECTIVO NOME
+    const nomeDoItem = arrayProdutoAdicionado.map((item) => {
+      return (
+        <p>
+          {item.quantidade}x {item.name}
+        </p>
+      );
+    });
+    console.log(nomeDoItem);
 
     // REDUCE PARA SOMAR OS VALORES DE TODOS OS PRODUTOS NO CARRINHO
     const soma = valorDoItem.reduce(
@@ -237,33 +240,11 @@ class Home extends React.Component {
     );
     console.log(soma);
 
-    // MAP DO STATE PARA MOSTRAR O CARD COM INFOS DO PRODUTO
-    const listaDeProdutos = this.state.produtos.map((produto) => {
-
-      return (
-        <div>
-          <div>
-            <img src={produto.imageUrl} alt="Imagem do produto" />
-            <p>{produto.name}</p>
-            <p>R$ {produto.value}</p>
-            <button onClick={() => this.adicionarNoCarrinho(produto)}>
-              Adicionar ao Carrinho
-            </button>
-          </div>
-        </div>
-      );
-    });
-
-
-    const numeroDeProdutos = listaDoEstado.length;
-
     // CONST PARA INDICAR A QUANTIDADE DE PRODUTOS
-    const numeroDeProdutos = this.state.produtos.length;
-
+    const numeroDeProdutos = listaDoEstado.length;
 
     // ============================================================
     return (
-
       <div>
         <div>
           <h1>Filtros</h1>
@@ -295,35 +276,36 @@ class Home extends React.Component {
         <div>{listaRenderizada}</div>
         <div>
           <h1>Carrinho:</h1>
-          {listaFinalProdutos}
+          {/*NOME DE CADA ITEM NO CARRINHO*/}
+          {nomeDoItem}
+          {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
+          <p>R${soma}</p>
         </div>
       </div>
 
-      <ContainerHome>
-        <CrescenteDecrescente>
-          <select onChange={this.onChangeSelect}>
-            <option></option> {/*VAZIO DE INÍCIO*/}
-            <option value="descrescente">Preço: Decrescente</option>
-            <option value="crescente">Preço: Crescente</option>
-          </select>
-          <p>Quantidade de Produtos: {numeroDeProdutos}</p>
-        </CrescenteDecrescente>
+      // <ContainerHome>
+      //   <CrescenteDecrescente>
+      //     <select onChange={this.onChangeSelect}>
+      //       <option></option> {/*VAZIO DE INÍCIO*/}
+      //       <option value="descrescente">Preço: Decrescente</option>
+      //       <option value="crescente">Preço: Crescente</option>
+      //     </select>
+      //     <p>Quantidade de Produtos: {numeroDeProdutos}</p>
+      //   </CrescenteDecrescente>
 
-        <ContainerCardECarrinho>
-          <ContainerCard>{listaDeProdutos}</ContainerCard>
+      //   <ContainerCardECarrinho>
+      //     <ContainerCard>{listaDeProdutos}</ContainerCard>
 
-          <ContainerCarrinho>
-            <h1>Carrinho:</h1>
-            {/*NOME DE CADA ITEM NO CARRINHO*/}
-            {nomeDoItem}
-            {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
-            <p>R${soma}</p>
-          </ContainerCarrinho>
-        </ContainerCardECarrinho>
-      </ContainerHome>
-
+      //     <ContainerCarrinho>
+      //       <h1>Carrinho:</h1>
+      //       {/*NOME DE CADA ITEM NO CARRINHO*/}
+      //       {nomeDoItem}
+      //       {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
+      //       <p>R${soma}</p>
+      //     </ContainerCarrinho>
+      //   </ContainerCardECarrinho>
+      // </ContainerHome>
     );
   }
 }
 export default Home;
-// teste
