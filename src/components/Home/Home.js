@@ -107,6 +107,12 @@ class Home extends React.Component {
     ordenado: false,
     contador: 1,
     novaListaCarrinho: [],
+
+    valorInputBusca: "",
+    valorInputMinimo: "",
+    valorInputMaximo: "",
+
+
   };
 
   // ORDENAR PRODUTOS EM CRESCENTE E DECRESCENTE
@@ -121,12 +127,31 @@ class Home extends React.Component {
     }
   };
 
+
+  onChangeInputMinimo = (event) => {
+    this.setState({ valorInputMinimo: event.target.value });
+  };
+
+  onChangeInputMaximo = (event) => {
+    this.setState({ valorInputMaximo: event.target.value });
+  };
+
+  onChangeInputBusca = (event) => {
+    this.setState({ valorInputBusca: event.target.value });
+    console.log(this.state.valorInputBusca);
+  };
+  filtraProdutos = (event) => {};
+
+
   // ADICIONAR PRODUTOS AO CARRINHO
+
   adicionarNoCarrinho = (produto) => {
     let carrinho = produto;
     this.setState({
       novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
     });
+
+
     //
     if (produto.id === this.state.produtos.id) {
       let objeto = this.state;
@@ -134,6 +159,7 @@ class Home extends React.Component {
       this.setState({ objeto });
       console.log(objeto);
     }
+
   };
   /*
   selectItem = (id) => {
@@ -157,6 +183,34 @@ class Home extends React.Component {
   */
 
   render() {
+
+    let listaDoEstado = this.state.produtos;
+    if (this.state.valorInputBusca !== "") {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.name.includes(this.state.valorInputBusca);
+      });
+    } else if (this.state.valorInputMaximo !== "") {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.value <= this.state.valorInputMaximo;
+      });
+    } else if (this.state.valorInputMinimo !== "") {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.value >= this.state.valorInputMinimo;
+      });
+    }
+
+    const listaFinalProdutos = this.state.novaListaCarrinho.map((item) => {
+      return (
+        <section>
+          <p>{item.value}</p>
+        </section>
+      );
+    });
+
+    const soma = listaFinalProdutos;
+
+    const listaRenderizada = listaDoEstado.map((produto) => {
+
     // MAP DO ARRAY DE PRODUTOS ADICIONADOS PARA PEGAR O VALOR DO PRODUTO
     const valorDoItem = this.state.novaListaCarrinho.map((item) => {
       return item.value;
@@ -185,6 +239,7 @@ class Home extends React.Component {
 
     // MAP DO STATE PARA MOSTRAR O CARD COM INFOS DO PRODUTO
     const listaDeProdutos = this.state.produtos.map((produto) => {
+
       return (
         <div>
           <div>
@@ -199,11 +254,51 @@ class Home extends React.Component {
       );
     });
 
+
+    const numeroDeProdutos = listaDoEstado.length;
+
     // CONST PARA INDICAR A QUANTIDADE DE PRODUTOS
     const numeroDeProdutos = this.state.produtos.length;
 
+
     // ============================================================
     return (
+
+      <div>
+        <div>
+          <h1>Filtros</h1>
+          <label>Valor Mínimo:</label>
+          <input
+            type="number"
+            value={this.state.valorInputMinimo}
+            onChange={this.onChangeInputMinimo}
+          ></input>
+          <label>Valor Máximo:</label>
+          <input
+            type="number"
+            value={this.state.valorInputMaximo}
+            onChange={this.onChangeInputMaximo}
+          ></input>
+          <label>Buscar Produto</label>
+          <input
+            value={this.state.valorInputBusca}
+            onChange={this.onChangeInputBusca}
+          ></input>
+          <hr />
+        </div>
+        <select onChange={this.onChangeSelect}>
+          <option></option>
+          <option value="descrescente">Preço: Decrescente</option>
+          <option value="crescente">Preço: Crescente</option>
+        </select>
+        <p>Quantidade de Produtos: {numeroDeProdutos}</p>
+        <div>{listaRenderizada}</div>
+        <div>
+          <h1>Carrinho:</h1>
+          {listaFinalProdutos}
+        </div>
+      </div>
+
       <ContainerHome>
         <CrescenteDecrescente>
           <select onChange={this.onChangeSelect}>
@@ -226,6 +321,7 @@ class Home extends React.Component {
           </ContainerCarrinho>
         </ContainerCardECarrinho>
       </ContainerHome>
+
     );
   }
 }

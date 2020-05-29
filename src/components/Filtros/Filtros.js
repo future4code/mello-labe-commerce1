@@ -13,7 +13,14 @@ const ContainerFiltro = styled.div`
 `;
 
 class Filtros extends React.Component {
+  state = {
+    valorInputBusca: "",
+  };
+  onChangeInputBusca = (event) => {
+    this.setState({valorInputBusca: event.target.value})
+  };
   render() {
+    console.log(this.state.valorInputBusca);
     return (
       <ContainerFiltro>
         <h1>Filtros</h1>
@@ -22,8 +29,13 @@ class Filtros extends React.Component {
         <label>Valor Máximo:</label>
         <input type="number"></input>
         <label>Buscar Produto</label>
+
+        <input value={this.state.valorInputBusca} onChange={this.onChangeInputBusca}></input>
+      </div>
+
         <input></input>
       </ContainerFiltro>
+
     );
   }
 }
