@@ -1,49 +1,85 @@
 import React from "react";
 import styled from "styled-components";
 
-/*const ContainerHome = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: green;
-  width: 85vw;
-  height: 100vh;
+const Container = styled.div`
+  padding: 0;
+  background-color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: black;
+  height: 600px;
 `;
-const CrescenteDecrescente = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-  background-color: blue;
-  width: 60vw;
-  height: 50px;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ContainerCardECarrinho = styled.div`
+const ContainerGeral = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  width: 85vw;
+  width: 100vw;
   height: 100vh;
 `;
-const ContainerCard = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
 
-  background-color: yellow;
+const ContainerFiltro = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 300px;
+  height: 80vh;
+  padding: 10px;
+  margin: 10px;
   border: 1px solid black;
+`;
+
+const CrescenteDecrescente = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  background-color: white;
+  width: 50vw;
+  height: 80px;
   justify-content: space-around;
   align-items: center;
+  margin: auto;
+`;
+
+const ContainerCard = styled.div`
+  display: flex;
+  /*flex-direction: row;*/
+  flex-wrap: wrap;
+
+  background-color: white;
+
+  justify-content: space-between;
+  align-items: center;
+  height: 900px;
+`;
+const Card = styled.div`
+  flex-direction: column;
+  border: 1px solid orange;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 400px;
+  width: 250px;
+  margin: 2px;
+`;
+const Button = styled.div`
+  background-color: black;
+  color: white;
+  height: 50px;
+  width: 10vw;
+  text-align: center;
+  font-size: small;
+  flex-wrap: wrap;
 `;
 
 const ContainerCarrinho = styled.div`
-  display: flex;
   flex-direction: column;
-  border: 1px solid pink;
-  justify-content: space-between;
+  background-color: white;
+  width: 400px;
+  height: 95vh;
+  padding: 10px;
   margin: 10px;
+  border: 1px solid black;
 `;
-*/
+
 class Home extends React.Component {
   state = {
     produtos: [
@@ -52,56 +88,48 @@ class Home extends React.Component {
         name: "Item A",
         value: 50.0,
         imageUrl: "https://picsum.photos/200/200?a=1",
-        adicionado: false,
       },
       {
         id: 2,
         name: "Item B",
         value: 20.0,
         imageUrl: "https://picsum.photos/200/200?a=2",
-        adicionado: false,
       },
       {
         id: 3,
         name: "Item C",
         value: 150.0,
         imageUrl: "https://picsum.photos/200/200?a=3",
-        adicionado: false,
       },
       {
         id: 4,
         name: "Item D",
         value: 349.0,
         imageUrl: "https://picsum.photos/200/200?a=4",
-        adicionado: false,
       },
       {
         id: 5,
         name: "Item E",
         value: 23.55,
         imageUrl: "https://picsum.photos/200/200?a=5",
-        adicionado: false,
       },
       {
         id: 6,
         name: "Item F",
         value: 123.0,
         imageUrl: "https://picsum.photos/200/200?a=6",
-        adicionado: false,
       },
       {
         id: 7,
         name: "Item G",
         value: 27.0,
         imageUrl: "https://picsum.photos/200/200?a=7",
-        adicionado: false,
       },
       {
         id: 8,
         name: "Item H",
         value: 950.0,
         imageUrl: "https://picsum.photos/200/200?a=8",
-        adicionado: false,
       },
     ],
     ordenado: false,
@@ -145,32 +173,25 @@ class Home extends React.Component {
       novaListaCarrinho: [...this.state.novaListaCarrinho, carrinho],
     });
   };
-  /*Deletar produto do carrinho
-  selectItem = (id) => {
-    //passar por todos ids da array, quando for igual o id do on click esse vai ter que riscar. if tarefa.id === id, tarefa.id = true, colocar em um novo array e dar um set state
-    const listaItensAdicionados = this.state.produtos.map(
-      (produto, index, array) => {
-        if (id === produto.id) {
-          const itensAdicionados = {
-            ...produto,
-            adicionado: !produto.adicionado,
-          };
-          //console.log(itensAdicionados);
-          return itensAdicionados;
-        } else {
-          return produto;
-        }
+  //Deletar produto do carrinho
+  apagarItemCarrinho = (itemId) => {
+    //console.log("apagar produto", itemId);
+    const listaItensCarrinho = this.state.novaListaCarrinho.filter((itens) => {
+      if (itemId === itens.id) {
+        return false;
+      } else {
+        return true;
       }
-    );
-    this.setState({ tarefas: listaItensAdicionados });
+    });
+    this.setState({ novaListaCarrinho: listaItensCarrinho });
   };
-  */
   //renderização condicional do filtro
   render() {
+    let maiusculas = this.state.valorInputBusca.toUpperCase();
     let listaDoEstado = this.state.produtos;
     if (this.state.valorInputBusca !== "") {
       listaDoEstado = listaDoEstado.filter((produto) => {
-        return produto.name.includes(this.state.valorInputBusca);
+        return produto.name.includes(maiusculas);
       });
     } else if (this.state.valorInputMaximo !== "") {
       listaDoEstado = listaDoEstado.filter((produto) => {
@@ -184,14 +205,15 @@ class Home extends React.Component {
     // Cópia do state produtos
     const listaRenderizada = listaDoEstado.map((produto) => {
       return (
-        <div>
+        <Card>
+          <img src={produto.imageUrl} alt="Imagem do produto" />
           <p>{produto.name}</p>
           <p>R$ {produto.value}</p>
-          <img src={produto.imageUrl} alt="Imagem do produto" />
-          <button onClick={() => this.adicionarNoCarrinho(produto)}>
+
+          <Button onClick={() => this.adicionarNoCarrinho(produto)}>
             Adicionar ao Carrinho
-          </button>
-        </div>
+          </Button>
+        </Card>
       );
     });
 
@@ -226,9 +248,11 @@ class Home extends React.Component {
     //CADA PRODUTO E O RESPECTIVO NOME
     const nomeDoItem = arrayProdutoAdicionado.map((item) => {
       return (
-        <p>
-          {item.quantidade}x {item.name}
-        </p>
+        <div>
+          <p onClick={() => this.apagarItemCarrinho(item.id)}>
+            {item.quantidade}x {item.name} - <strong>X</strong>
+          </p>
+        </div>
       );
     });
     console.log(nomeDoItem);
@@ -245,66 +269,55 @@ class Home extends React.Component {
 
     // ============================================================
     return (
-      <div>
-        <div>
-          <h1>Filtros</h1>
-          <label>Valor Mínimo:</label>
-          <input
-            type="number"
-            value={this.state.valorInputMinimo}
-            onChange={this.onChangeInputMinimo}
-          ></input>
-          <label>Valor Máximo:</label>
-          <input
-            type="number"
-            value={this.state.valorInputMaximo}
-            onChange={this.onChangeInputMaximo}
-          ></input>
-          <label>Buscar Produto</label>
-          <input
-            value={this.state.valorInputBusca}
-            onChange={this.onChangeInputBusca}
-          ></input>
-          <hr />
-        </div>
-        <select onChange={this.onChangeSelect}>
-          <option></option>
-          <option value="descrescente">Preço: Decrescente</option>
-          <option value="crescente">Preço: Crescente</option>
-        </select>
-        <p>Quantidade de Produtos: {numeroDeProdutos}</p>
-        <div>{listaRenderizada}</div>
-        <div>
-          <h1>Carrinho:</h1>
-          {/*NOME DE CADA ITEM NO CARRINHO*/}
-          {nomeDoItem}
-          {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
-          <p>R${soma}</p>
-        </div>
-      </div>
+      <Container>
+        <CrescenteDecrescente>
+          {" "}
+          <select onChange={this.onChangeSelect}>
+            <option></option>
+            <option value="descrescente">Preço: Decrescente</option>
+            <option value="crescente">Preço: Crescente</option>
+          </select>
+          <p>Quantidade de Produtos: {numeroDeProdutos}</p>
+        </CrescenteDecrescente>
+        <ContainerGeral>
+          {/*filtro*/}
+          <ContainerFiltro>
+            <h1>Filtros</h1>
+            <label>Valor Mínimo:</label>
+            <input
+              type="number"
+              value={this.state.valorInputMinimo}
+              onChange={this.onChangeInputMinimo}
+            ></input>
+            <label>Valor Máximo:</label>
+            <input
+              type="number"
+              value={this.state.valorInputMaximo}
+              onChange={this.onChangeInputMaximo}
+            ></input>
+            <label>Buscar Produto</label>
+            <input
+              value={this.state.valorInputBusca}
+              onChange={this.onChangeInputBusca}
+            ></input>
+            <hr />
+          </ContainerFiltro>
 
-      // <ContainerHome>
-      //   <CrescenteDecrescente>
-      //     <select onChange={this.onChangeSelect}>
-      //       <option></option> {/*VAZIO DE INÍCIO*/}
-      //       <option value="descrescente">Preço: Decrescente</option>
-      //       <option value="crescente">Preço: Crescente</option>
-      //     </select>
-      //     <p>Quantidade de Produtos: {numeroDeProdutos}</p>
-      //   </CrescenteDecrescente>
+          {/*cards*/}
+          <ContainerCard>{listaRenderizada}</ContainerCard>
+          {/*crescente decrescente*/}
 
-      //   <ContainerCardECarrinho>
-      //     <ContainerCard>{listaDeProdutos}</ContainerCard>
-
-      //     <ContainerCarrinho>
-      //       <h1>Carrinho:</h1>
-      //       {/*NOME DE CADA ITEM NO CARRINHO*/}
-      //       {nomeDoItem}
-      //       {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
-      //       <p>R${soma}</p>
-      //     </ContainerCarrinho>
-      //   </ContainerCardECarrinho>
-      // </ContainerHome>
+          {/*carrinho*/}
+          <ContainerCarrinho>
+            <h1>Carrinho:</h1>
+            {/*NOME DE CADA ITEM NO CARRINHO*/}
+            {nomeDoItem}
+            {}
+            {/*TOTAL SOMA DOS PRODUTOS NO CARRINHO*/}
+            <p>R${soma}</p>
+          </ContainerCarrinho>
+        </ContainerGeral>
+      </Container>
     );
   }
 }
