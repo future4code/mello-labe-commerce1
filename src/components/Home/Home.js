@@ -1,84 +1,17 @@
 import React from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  padding: 0;
-  background-color: white;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  color: black;
-  height: 600px;
-`;
-const ContainerGeral = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  width: 100vw;
-  height: 100vh;
-`;
-
-const ContainerFiltro = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  width: 300px;
-  height: 80vh;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid black;
-`;
-
-const CrescenteDecrescente = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-  background-color: white;
-  width: 50vw;
-  height: 80px;
-  justify-content: space-around;
-  align-items: center;
-  margin: auto;
-`;
-
-const ContainerCard = styled.div`
-  display: flex;
-  /*flex-direction: row;*/
-  flex-wrap: wrap;
-
-  background-color: white;
-
-  justify-content: space-between;
-  align-items: center;
-  height: 900px;
-`;
-const Card = styled.div`
-  flex-direction: column;
-  border: 1px solid orange;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  height: 400px;
-  width: 250px;
-  margin: 2px;
-`;
-const Button = styled.div`
-  background-color: black;
-  color: white;
-  height: 50px;
-  width: 10vw;
-  text-align: center;
-  font-size: small;
-  flex-wrap: wrap;
-`;
-
-const ContainerCarrinho = styled.div`
-  flex-direction: column;
-  background-color: white;
-  width: 400px;
-  height: 95vh;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid black;
-`;
+import Icone from "../Icone/Icone";
+import iconeFavoritoBranco from "../../img/icone-favorito-branco.svg";
+import iconeFavoritoPreto from "../../img/icone-favorito-preto.svg";
+import {
+  Container,
+  ContainerGeral,
+  ContainerFiltro,
+  CrescenteDecrescente,
+  ContainerCard,
+  Card,
+  Button,
+  ContainerCarrinho,
+} from "./Style";
 
 class Home extends React.Component {
   state = {
@@ -88,48 +21,56 @@ class Home extends React.Component {
         name: "Item A",
         value: 50.0,
         imageUrl: "https://picsum.photos/200/200?a=1",
+        favorito: false,
       },
       {
         id: 2,
         name: "Item B",
         value: 20.0,
         imageUrl: "https://picsum.photos/200/200?a=2",
+        favorito: false,
       },
       {
         id: 3,
         name: "Item C",
         value: 150.0,
         imageUrl: "https://picsum.photos/200/200?a=3",
+        favorito: false,
       },
       {
         id: 4,
         name: "Item D",
         value: 349.0,
         imageUrl: "https://picsum.photos/200/200?a=4",
+        favorito: false,
       },
       {
         id: 5,
         name: "Item E",
         value: 23.55,
         imageUrl: "https://picsum.photos/200/200?a=5",
+        favorito: false,
       },
       {
         id: 6,
         name: "Item F",
         value: 123.0,
         imageUrl: "https://picsum.photos/200/200?a=6",
+        favorito: false,
       },
       {
         id: 7,
         name: "Item G",
         value: 27.0,
         imageUrl: "https://picsum.photos/200/200?a=7",
+        favorito: false,
       },
       {
         id: 8,
         name: "Item H",
         value: 950.0,
         imageUrl: "https://picsum.photos/200/200?a=8",
+        favorito: false,
       },
     ],
     ordenado: false,
@@ -185,6 +126,15 @@ class Home extends React.Component {
     });
     this.setState({ novaListaCarrinho: listaItensCarrinho });
   };
+
+  onClickFavorito = (id) => {
+    const arrayFavorito = this.state.produtos;
+    console.log(arrayFavorito);
+    const recebeIndex = arrayFavorito.findIndex((produto) => produto.id === id);
+    arrayFavorito[recebeIndex].favorito = !arrayFavorito[recebeIndex].favorito;
+    this.setState({ produtos: arrayFavorito });
+  };
+
   //renderização condicional do filtro
   render() {
     let maiusculas = this.state.valorInputBusca.toUpperCase();
@@ -202,6 +152,7 @@ class Home extends React.Component {
         return produto.value >= this.state.valorInputMinimo;
       });
     }
+
     // Cópia do state produtos
     const listaRenderizada = listaDoEstado.map((produto) => {
       return (
@@ -213,6 +164,10 @@ class Home extends React.Component {
           <Button onClick={() => this.adicionarNoCarrinho(produto)}>
             Adicionar ao Carrinho
           </Button>
+          <Icone
+            icone={produto.favorito ? iconeFavoritoPreto : iconeFavoritoBranco}
+            onClickIcone={() => this.onClickFavorito(produto.id)}
+          />
         </Card>
       );
     });
@@ -255,14 +210,12 @@ class Home extends React.Component {
         </div>
       );
     });
-    console.log(nomeDoItem);
 
     // REDUCE PARA SOMAR OS VALORES DE TODOS OS PRODUTOS NO CARRINHO
     const soma = valorDoItem.reduce(
       (soma, valorDoItem) => soma + valorDoItem,
       0
     );
-    console.log(soma);
 
     // CONST PARA INDICAR A QUANTIDADE DE PRODUTOS
     const numeroDeProdutos = listaDoEstado.length;
@@ -300,7 +253,6 @@ class Home extends React.Component {
               value={this.state.valorInputBusca}
               onChange={this.onChangeInputBusca}
             ></input>
-            <hr />
           </ContainerFiltro>
 
           {/*cards*/}
