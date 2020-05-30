@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Filtros from "./components/Filtros/Filtros";
+
 import Home from "./components/Home/Home";
 import styled from "styled-components";
 
@@ -14,8 +14,6 @@ const ContainerGeral = styled.div`
 function App() {
   return (
     <ContainerGeral>
-      <Filtros />
-
       <Home />
     </ContainerGeral>
   );
