@@ -83,9 +83,19 @@ export const ContainerCarrinho = styled.div`
   margin: 10px;
   border: 1px solid black;
 `;
-/*NOVO*/
+
+
 export const IconeX = styled.strong`
   :hover {
     color: orange;
   }
 `;
+
+
+export const Checkbox = styled.input`
+display: inline-block;
+margin-left: 10px;
+margin-top: 8px;
+
+`
+

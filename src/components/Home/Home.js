@@ -11,7 +11,11 @@ import {
   Card,
   Button,
   ContainerCarrinho,
-  IconeX /*NOVO*/,
+
+  IconeX,
+
+  Checkbox,
+
 } from "./Style";
 
 class Home extends React.Component {
@@ -81,6 +85,7 @@ class Home extends React.Component {
     valorInputBusca: "",
     valorInputMinimo: "",
     valorInputMaximo: "",
+    checkboxFavoritos: false
   };
 
   // ORDENAR PRODUTOS EM CRESCENTE E DECRESCENTE
@@ -94,6 +99,13 @@ class Home extends React.Component {
       this.setState({ produtos: listaOrdenada.reverse() });
     }
   };
+  // INVERTE O VALOR DO ESTADO DO CHECKBOX QUE FILTRA FAVORITOS
+  onChangeCheckbox = (event) => {
+    this.setState({checkboxFavoritos: !this.state.checkboxFavoritos})
+    if (!this.state.checkboxFavoritos === true) {
+    }
+
+  }
 
   onChangeInputMinimo = (event) => {
     this.setState({ valorInputMinimo: event.target.value });
@@ -168,6 +180,10 @@ class Home extends React.Component {
     } else if (this.state.valorInputMinimo !== "") {
       listaDoEstado = listaDoEstado.filter((produto) => {
         return produto.value >= this.state.valorInputMinimo;
+      });
+    } else if (this.state.checkboxFavoritos === true) {
+      listaDoEstado = listaDoEstado.filter((produto) => {
+        return produto.favorito === true;
       });
     }
 
@@ -274,6 +290,10 @@ class Home extends React.Component {
               value={this.state.valorInputBusca}
               onChange={this.onChangeInputBusca}
             ></input>
+            <div>
+              <label>Filtrar Favoritos</label>
+              <Checkbox type="checkbox" onChange={this.onChangeCheckbox} value={this.state.checkboxFavoritos} />
+            </div>
           </ContainerFiltro>
 
           {/*cards*/}
