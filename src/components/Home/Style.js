@@ -79,3 +79,10 @@ export const ContainerCarrinho = styled.div`
   margin: 10px;
   border: 1px solid black;
 `;
+
+export const Checkbox = styled.input`
+display: inline-block;
+margin-left: 10px;
+margin-top: 8px;
+
+`
