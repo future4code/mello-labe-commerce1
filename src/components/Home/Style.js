@@ -68,6 +68,10 @@ export const Button = styled.div`
   text-align: center;
   font-size: small;
   flex-wrap: wrap;
+  :hover {
+    /*NOVO*/
+    background-color: rgb(0, 0, 0, 0.5);
+  }
 `;
 
 export const ContainerCarrinho = styled.div`
@@ -80,9 +84,18 @@ export const ContainerCarrinho = styled.div`
   border: 1px solid black;
 `;
 
+
+export const IconeX = styled.strong`
+  :hover {
+    color: orange;
+  }
+`;
+
+
 export const Checkbox = styled.input`
 display: inline-block;
 margin-left: 10px;
 margin-top: 8px;
 
 `
+

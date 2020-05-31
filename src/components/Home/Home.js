@@ -11,7 +11,11 @@ import {
   Card,
   Button,
   ContainerCarrinho,
+
+  IconeX,
+
   Checkbox,
+
 } from "./Style";
 
 class Home extends React.Component {
@@ -135,7 +139,7 @@ class Home extends React.Component {
     });
     this.setState({ novaListaCarrinho: listaItensCarrinho });
   };
-
+  //marcar coo favorito
   onClickFavorito = (id) => {
     const arrayFavorito = this.state.produtos;
     console.log(arrayFavorito);
@@ -143,6 +147,23 @@ class Home extends React.Component {
     arrayFavorito[recebeIndex].favorito = !arrayFavorito[recebeIndex].favorito;
     this.setState({ produtos: arrayFavorito });
   };
+  //local storge  e ciclo de vida
+
+  componentDidUpdate = () => {
+    const novoCarrinho = this.state.novaListaCarrinho;
+
+    localStorage.setItem("carrinho", JSON.stringify(novoCarrinho)); //gurdar o carrinho //pega um array-objeto e transforma em string para guardar
+  };
+
+  componentDidMount = () => {
+    const carrinhoNoLocalStorage = localStorage.getItem("carrinho"); //para buscar o valor q foi guardado no local storge
+
+    const carrinhoObjeto = JSON.parse(carrinhoNoLocalStorage); //para transformas noavmente em array-objeto
+
+    console.log(carrinhoObjeto);
+  };
+
+  componentWillUnmount = () => {};
 
   //renderização condicional do filtro
   render() {
@@ -177,6 +198,7 @@ class Home extends React.Component {
           <Button onClick={() => this.adicionarNoCarrinho(produto)}>
             Adicionar ao Carrinho
           </Button>
+
           <Icone
             icone={produto.favorito ? iconeFavoritoPreto : iconeFavoritoBranco}
             onClickIcone={() => this.onClickFavorito(produto.id)}
@@ -217,8 +239,10 @@ class Home extends React.Component {
     const nomeDoItem = arrayProdutoAdicionado.map((item) => {
       return (
         <div>
-          <p onClick={() => this.apagarItemCarrinho(item.id)}>
-            {item.quantidade}x {item.name} - <strong>X</strong>
+          <p>
+            {item.quantidade}x {item.name} -{" "}
+            <IconeX onClick={() => this.apagarItemCarrinho(item.id)}>X</IconeX>
+            {/*NOVO*/}
           </p>
         </div>
       );
